@@ -8,11 +8,12 @@ deploy:
   provider: script
   skip_cleanup: true
   script: >
-    cp README.md LICENSE package.json target/out;
     npm config set '//registry.npmjs.org/:_authToken' "$NPM_TOKEN";
+    git remote set-url origin https://${GH_TOKEN}@github.com/${TRAVIS_REPO_SLUG}.git;
     npm version patch -m "v%s [ci skip]";
-    git remote set-url origin https://${GH_TOKEN}@github.com/${TRAVIS_REPO_SLUG}.git
+    cp README.md LICENSE package.json target/out;
     git push origin HEAD:$TRAVIS_BRANCH;
+    cd target/out;
     npm publish;
   on:
     branch: master
