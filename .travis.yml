@@ -8,6 +8,7 @@ deploy:
   provider: script
   skip_cleanup: true
   script: >
+    rm package-lock.json;
     npm config set '//registry.npmjs.org/:_authToken' "$NPM_TOKEN";
     git remote set-url origin https://${GH_TOKEN}@github.com/${TRAVIS_REPO_SLUG}.git;
     npm version patch -m "v%s [ci skip]";
