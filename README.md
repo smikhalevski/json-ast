@@ -19,7 +19,7 @@ class FooVisitor extends Visitor {
 
 traverseJsonAst(jsonAst, new FooVisitor())
   .then(generateJson)
-  .then(json => console.log(json)) // → {foo: 'qux'}
+  .then(json => console.log(json)) // → [{foo: 'qux'}]
 
 ```
 
