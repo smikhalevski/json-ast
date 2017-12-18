@@ -12,7 +12,7 @@ deploy:
     npm config set '//registry.npmjs.org/:_authToken' "$NPM_TOKEN";
     npm version patch -m "v%s [ci skip]";
     npm publish;
-    git remote set-url origin https://${GH_TOKEN}@github.com/smikhalevski/json-ast-visitor.git
+    git remote set-url origin https://${GH_TOKEN}@github.com/${TRAVIS_REPO_SLUG}.git
     git push origin HEAD:$TRAVIS_BRANCH;
   on:
     branch: master
