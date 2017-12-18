@@ -1,6 +1,6 @@
 {
   "name": "json-ast-visitor",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "JSON abstract syntax tree parser, visitor and serializer",
   "repository": {
     "type": "git",
