@@ -1,11 +1,12 @@
 {
-  "name": "json-ast",
+  "name": "json-ast-visitor",
   "version": "1.0.0",
-  "description": "JSON abstract syntax tree parser and serializer",
+  "description": "JSON abstract syntax tree parser, visitor and serializer",
   "repository": {
     "type": "git",
-    "url": "https://github.com/smikhalevski/json-ast.git"
+    "url": "https://github.com/smikhalevski/json-ast-visitor.git"
   },
+  "main": "index.js",
   "scripts": {
     "clean": "rm -rf target",
     "test": "jest",

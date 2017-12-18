@@ -1,9 +1,9 @@
-# JSON AST
+# JSON AST Visitor
 
-JSON abstract syntax tree parser and serializer.
+JSON abstract syntax tree parser, visitor and serializer.
 
 ```js
-import {parseJson, traverseJsonAst, generateJson, Visitor} from 'json-ast';
+import {parseJson, traverseJsonAst, generateJson, Visitor} from 'json-ast-visitor';
 
 const json = [{foo: 'bar'}];
 const jsonAst = parseJson(json);

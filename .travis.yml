@@ -1,0 +1,18 @@
+language: node_js
+node_js: 8.8.1
+script:
+  - npm run flow
+  - npm test
+  - npm run build
+deploy:
+  provider: script
+  skip_cleanup: true
+  script: >
+    cp README.md LICENSE package.json target/out;
+    npm config set '//registry.npmjs.org/:_authToken' "$NPM_TOKEN";
+    npm version patch -m "v%s [ci skip]";
+    npm publish;
+    git remote set-url origin https://${GH_TOKEN}@github.com/smikhalevski/json-ast-visitor.git
+    git push origin HEAD:$TRAVIS_BRANCH;
+  on:
+    branch: master
