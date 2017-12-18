@@ -339,7 +339,7 @@ describe('traverseJsonAst', () => {
         node,
         visitor
     );
-    expect(visitor.visitPrimitive.mock.calls[0][0]).toBe(node.get('a').get('b'));
+    expect(visitor.visitPrimitive).toHaveBeenLastCalledWith(node.get('a').get('b'));
   });
 });
 
@@ -360,6 +360,12 @@ describe('generateJson', () => {
     const ast = parseJson(json);
 
     expect(generateJson(ast)).toEqual(json);
+  });
+
+  it('throws on non-Node input', () => {
+    expect(() => generateJson(null)).toThrow();
+    expect(() => generateJson('foo')).toThrow();
+    expect(() => generateJson({})).toThrow();
   });
 });
 

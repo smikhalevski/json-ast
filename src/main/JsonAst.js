@@ -276,10 +276,7 @@ export function parseJson(value: Json): Node<*> {
   }
 }
 
-export function generateJson(node: ?Node<*>): Json {
-  if (node == null) {
-    return null;
-  }
+export function generateJson(node: Node<*>): Json {
   if (node instanceof ArrayNode) {
     const value = [];
     for (const [key, child] of node.entries()) {
