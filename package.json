@@ -1,0 +1,25 @@
+{
+  "name": "json-ast",
+  "version": "1.0.0",
+  "description": "JSON abstract syntax tree parser and serializer",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/smikhalevski/json-ast.git"
+  },
+  "scripts": {
+    "clean": "rm -rf target",
+    "test": "jest",
+    "flow": "flow",
+    "build": "rm -rf target/out; babel src/main -d target/out"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.24.1",
+    "babel-core": "^6.24.0",
+    "babel-jest": "18.0.0",
+    "babel-preset-env": "^1.6.0",
+    "babel-preset-flow": "^6.23.0",
+    "babel-preset-stage-0": "^6.24.1",
+    "flow-bin": "^0.51.0",
+    "jest": "18.0.0"
+  }
+}

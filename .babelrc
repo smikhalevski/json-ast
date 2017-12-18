@@ -1,0 +1,8 @@
+{
+  "ignore": "node_modules",
+  "presets": [
+    ["env", {"loose": true}],
+    "flow",
+    "stage-0"
+  ]
+}
