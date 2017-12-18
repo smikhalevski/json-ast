@@ -1,1 +1,1 @@
-export {JsonAst} from './JsonAst.js';
+export * from './JsonAst.js';

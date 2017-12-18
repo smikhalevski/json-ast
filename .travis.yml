@@ -5,6 +5,8 @@ script:
   - npm test
   - npm run build
 deploy:
+  on:
+    branch: master
   provider: script
   skip_cleanup: true
   script: >
@@ -16,5 +18,3 @@ deploy:
     git push origin HEAD:$TRAVIS_BRANCH;
     cd target/out;
     npm publish;
-  on:
-    branch: master
