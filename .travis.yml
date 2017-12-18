@@ -11,8 +11,8 @@ deploy:
     cp README.md LICENSE package.json target/out;
     npm config set '//registry.npmjs.org/:_authToken' "$NPM_TOKEN";
     npm version patch -m "v%s [ci skip]";
-    npm publish;
     git remote set-url origin https://${GH_TOKEN}@github.com/${TRAVIS_REPO_SLUG}.git
     git push origin HEAD:$TRAVIS_BRANCH;
+    npm publish;
   on:
     branch: master
