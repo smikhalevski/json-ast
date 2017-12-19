@@ -1,7 +1,6 @@
 // @flow
 import type {Json, JsonPrimitive} from './JsonType';
-
-type Awaitable<T> = T | Promise<T>;
+import {Visitor} from './Visitor';
 
 export interface Node<K> {
   parent: ?ContainerNode<*, K>;
@@ -22,8 +21,6 @@ export interface ContainerNode<P, K> extends Node<P> {
   includes(node: Node<*>): boolean;
   entries(): Iterator<[K, Node<K>]>;
 }
-
-export type JsonAst = Node<*>;
 
 export class AbstractNode<K> implements Node<K> {
 
@@ -69,12 +66,30 @@ export class PrimitiveNode<K, V: JsonPrimitive> extends AbstractNode<K> {
 
   value: V;
 
+  constructor(value: V) {
+    super();
+    this.value = value;
+  }
+
   set(value: V) {
     this.value = value;
   }
 
   get(): V {
     return this.value;
+  }
+}
+
+export class NumberNode<K> extends PrimitiveNode<K, number> {}
+
+export class StringNode<K> extends PrimitiveNode<K, string> {}
+
+export class BooleanNode<K> extends PrimitiveNode<K, boolean> {}
+
+export class NullNode<K> extends PrimitiveNode<K, null> {
+
+  constructor() {
+    super(null);
   }
 }
 
@@ -208,27 +223,6 @@ export class ObjectNode<K> extends AbstractNode<K> implements ContainerNode<K, s
   }
 }
 
-export class Visitor {
-  
-  visit(node: Node<*>): Awaitable<*> {
-    if (node instanceof PrimitiveNode) {
-      return this.visitPrimitive(node);
-    }
-    if (node instanceof ArrayNode) {
-      return this.visitArray(node);
-    }
-    if (node instanceof ObjectNode) {
-      return this.visitObject(node);
-    }
-  }
-
-  visitPrimitive(node: PrimitiveNode<*, JsonPrimitive>): Awaitable<*> {}
-
-  visitArray(node: ArrayNode<*>): Awaitable<*> {}
-
-  visitObject(node: ObjectNode<*>): Awaitable<*> {}
-}
-
 export async function traverseJsonAst(node: Node<*>, visitor: Visitor): Promise<Node<*>> {
   await visitor.visit(node);
 
@@ -241,8 +235,7 @@ export async function traverseJsonAst(node: Node<*>, visitor: Visitor): Promise<
 }
 
 export function parseJson(value: Json): Node<*> {
-
-  let node: JsonAst;
+  let node: Node<*>;
 
   if (Array.isArray(value)) {
     node = new ArrayNode();
@@ -251,9 +244,7 @@ export function parseJson(value: Json): Node<*> {
   }
 
   if (value === null) {
-    node = new PrimitiveNode();
-    node.set(null);
-    return node;
+    return new NullNode();
   }
 
   switch (typeof value) {
@@ -266,11 +257,13 @@ export function parseJson(value: Json): Node<*> {
       return node;
 
     case 'number':
+      return new NumberNode(value);
+
     case 'string':
+      return new StringNode(value);
+
     case 'boolean':
-      node = new PrimitiveNode();
-      node.set(value);
-      return node;
+      return new BooleanNode(value);
 
     default: throw new TypeError(typeof value + ' is not supported');
   }

@@ -1,4 +1,13 @@
-import {ArrayNode, generateJson, ObjectNode, parseJson, PrimitiveNode, traverseJsonAst, Visitor} from '../main/JsonAst';
+import {
+  ArrayNode,
+  generateJson,
+  NumberNode,
+  ObjectNode,
+  parseJson,
+  PrimitiveNode,
+  traverseJsonAst,
+} from '../main/JsonAst';
+import {JsonVisitor, Visitor} from '../main/Visitor';
 
 describe('ArrayNode.entries', () => {
 
@@ -179,7 +188,6 @@ describe('ArrayNode.push', () => {
 });
 
 
-
 describe('ObjectNode.entries', () => {
 
   it('return entries of an object', () => {
@@ -333,13 +341,10 @@ describe('traverseJsonAst', () => {
 
   test('visits nested nodes', async () => {
     const visitor = new Visitor();
-    visitor.visitPrimitive = jest.fn();
+    visitor.visit = jest.fn();
     const node = parseJson({a: {b: 1}});
-    await traverseJsonAst(
-        node,
-        visitor
-    );
-    expect(visitor.visitPrimitive).toHaveBeenLastCalledWith(node.get('a').get('b'));
+    await traverseJsonAst(node, visitor);
+    expect(visitor.visit).toHaveBeenLastCalledWith(node.get('a').get('b'));
   });
 });
 
@@ -375,10 +380,11 @@ describe('Documentation examples', () => {
     const json = [{foo: 'bar'}];
     const jsonAst = parseJson(json);
 
-    class FooVisitor extends Visitor {
-      visitPrimitive(node) {
+    class FooVisitor extends JsonVisitor {
+
+      visitString(node) {
         if (node.getKey() === 'foo') {
-          node.set('qux');
+          node.replace(new NumberNode(123));
         }
       }
     }
@@ -386,7 +392,7 @@ describe('Documentation examples', () => {
     traverseJsonAst(jsonAst, new FooVisitor())
       .then(generateJson)
       .then(json => {
-        expect(json).toEqual([{foo: 'qux'}]);
+        expect(json).toEqual([{foo: 123}]);
         done();
       });
   });

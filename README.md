@@ -3,23 +3,23 @@
 JSON abstract syntax tree parser, visitor and serializer.
 
 ```js
-import {parseJson, traverseJsonAst, generateJson, Visitor} from 'json-ast-visitor';
+import {parseJson, traverseJsonAst, generateJson, JsonVisitor, NumberNode} from 'json-ast-visitor';
 
 const json = [{foo: 'bar'}];
 const jsonAst = parseJson(json);
 
-class FooVisitor extends Visitor {
-  
-  visitPrimitive(node) {
+class FooVisitor extends JsonVisitor {
+
+  visitString(node) {
     if (node.getKey() === 'foo') {
-      node.set('qux');
+      node.replace(new NumberNode(123));
     }
   }
 }
 
 traverseJsonAst(jsonAst, new FooVisitor())
   .then(generateJson)
-  .then(json => console.log(json)) // → [{foo: 'qux'}]
+  .then(json => console.log(json)) // → [{foo: 123}]
 
 ```
 
